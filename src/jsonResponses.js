@@ -5,7 +5,7 @@ const respond = (request, response, content, types, status) => {
   if (types[0] === 'text/xml') {
     let responseXML = '<response>';
     responseXML = `${responseXML} <message>${content.message}</message>`;
-    status === 200 ? '' : responseXML = `${responseXML}<id>${content.message}</id>`;
+    responseXML = (status === 200 ? responseXML : `${responseXML}<id>${content.message}</id>`);
     responseXML = `${responseXML} </response>`;
     responseString = responseXML;
     type = 'text/xml';
@@ -33,11 +33,10 @@ const getBad = (request, response, acceptedTypes, params) => {
     message: 'This is a successful response',
   };
   // check if has valid param
-  if(params.valid === 'true')
-  return respond(request, response, responseJSON, acceptedTypes, 200);
+  if (params.valid === 'true') { return respond(request, response, responseJSON, acceptedTypes, 200); }
 
-  responseJSON.message = "Missing valid query parameter set to true";
-  responseJSON.id = 'badRequest'
+  responseJSON.message = 'Missing valid query parameter set to true';
+  responseJSON.id = 'badRequest';
   return respond(request, response, responseJSON, acceptedTypes, 400);
 };
 
@@ -47,11 +46,10 @@ const getUnauth = (request, response, acceptedTypes, params) => {
     message: 'This is a successful response',
   };
   // check if has loggedIn param
-  if(params.loggedIn === 'yes')
-  return respond(request, response, responseJSON, acceptedTypes, 200);
+  if (params.loggedIn === 'yes') { return respond(request, response, responseJSON, acceptedTypes, 200); }
 
-  
-  responseJSON.message = "Missing loggedIn query parameter set to yes";
+
+  responseJSON.message = 'Missing loggedIn query parameter set to yes';
   responseJSON.id = 'unauthorized';
   return respond(request, response, responseJSON, acceptedTypes, 401);
 };
@@ -60,7 +58,7 @@ const getUnauth = (request, response, acceptedTypes, params) => {
 const getForbidden = (request, response, acceptedTypes) => {
   const responseJSON = {
     message: 'You do not have access to this content.',
-    id: 'forbidden'
+    id: 'forbidden',
   };
   return respond(request, response, responseJSON, acceptedTypes, 403);
 };
